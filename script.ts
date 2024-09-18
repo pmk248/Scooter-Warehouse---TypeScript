@@ -5,7 +5,7 @@ let fullSquare: string = `<svg xmlns="http://www.w3.org/2000/svg" width="16" hei
 
 //---------- DATA STRUCTURES: ----------//
 interface Scooter {
-    serialNumber?: string;
+    serialNumber: string;
     model: string;
     batteryLevel: number;
     imageUrl: string; 
@@ -21,7 +21,7 @@ enum Status {
 class ScooterCard {
     element: HTMLElement;
     scooterData: any;
-    constructor(element: HTMLElement, scooterData: any) {
+    constructor(element: HTMLElement, scooterData: Scooter) {
         this.element = element;
         this.scooterData = scooterData;
         this.renderCards();
@@ -44,7 +44,7 @@ class ScooterCard {
             removeScooter(this.scooterData.id);
         });
         this.element.querySelector('.edit-button')?.addEventListener("click", () => {
-            openEditForm(this.scooterData.id);
+            //openEditForm(this.scooterData.id);
         });
     };
 };
@@ -129,13 +129,26 @@ async function editScooter(id: string, edittedScooter: Scooter): Promise<void> {
     } 
 };
 
+//---------- MAIN ELEMENTS: ----------//
+const CONTAINER = document.getElementById('card-container');
+
 //---------- DOM FUNCTIONS: ----------//
 document.addEventListener("DOMContentLoaded", () => {
     renderCards();
 });
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById('add-scooters-button')?.addEventListener("click", () => {
+        const createForm = document.getElementById('create-form');
+        if (createForm) {
+            createForm.classList.add('unhidden');
+        }
+    });
 
-const FORM = document.getElementById('create-form');
-const CONTAINER = document.getElementById('card-container');
+    document.getElementById('create-form')?.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        // Will add form data collection logic here
+    });
+});
 
 
 function renderCards(): void {

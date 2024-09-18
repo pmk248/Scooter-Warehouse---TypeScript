@@ -46,7 +46,7 @@ class ScooterCard {
             removeScooter(this.scooterData.id);
         });
         (_b = this.element.querySelector('.edit-button')) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
-            openEditForm(this.scooterData.id);
+            //openEditForm(this.scooterData.id);
         });
     }
     ;
@@ -145,12 +145,25 @@ function editScooter(id, edittedScooter) {
     });
 }
 ;
+//---------- MAIN ELEMENTS: ----------//
+const CONTAINER = document.getElementById('card-container');
 //---------- DOM FUNCTIONS: ----------//
 document.addEventListener("DOMContentLoaded", () => {
     renderCards();
 });
-const FORM = document.getElementById('create-form');
-const CONTAINER = document.getElementById('card-container');
+document.addEventListener("DOMContentLoaded", () => {
+    var _a, _b;
+    (_a = document.getElementById('add-scooters-button')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
+        const createForm = document.getElementById('create-form');
+        if (createForm) {
+            createForm.classList.add('unhidden');
+        }
+    });
+    (_b = document.getElementById('create-form')) === null || _b === void 0 ? void 0 : _b.addEventListener("submit", (event) => __awaiter(void 0, void 0, void 0, function* () {
+        event.preventDefault();
+        // Will add form data collection logic here
+    }));
+});
 function renderCards() {
     const allScooters = getAllScooters();
 }

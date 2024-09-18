@@ -6,10 +6,37 @@
     <title>Document</title>
     <script src="script.js" defer></script>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
+    <nav>
+        <button type="button" class="btn btn-primary" id="add-scooters-button"> Add Scooter</button>
+    </nav>
     <form class="create-form" id="create-form">
-
+        <input type="text" name="model" placeholder="Model Name">
+        <input type="number" name="battery-level" placeholder="Battery Level">
+        <input type="color" name="color" value="#000000">
+        <input type="text" name="image-url" placeholder="URL of the image">
+        <select name="status">
+            <option name="available" value="0"> Available </option>
+            <option name="undergoing-repairs" value="1"> Undergoing Repairs </option>
+            <option name="unavailable" value="2"> Unavailable </option>
+        </select>
+        <input type="submit" value="Create">
+        <input type="reset" value="Reset Form">
+    </form>
+    <form class="edit-form" id="edit-form">
+        <input type="text" name="model">
+        <input type="number" name="battery-level">
+        <input type="color" name="color">
+        <input type="text" name="image-url">
+        <select name="status">
+            <option value="0"> Available </option>
+            <option value="1"> Undergoing Repairs </option>
+            <option value="2"> Unavailable </option>
+        </select>
+        <input type="reset" value="Cancel">
+        <input type="submit" value="Edit">
     </form>
     <div class="card-container" id="card-container">
 
