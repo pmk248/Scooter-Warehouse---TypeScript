@@ -89,7 +89,7 @@ input[type="color"] {
     margin-top: 30px;
 }
 
-.hidden, .hidden .card {
+.hidden {
     display: none !important;
 }
 
@@ -138,4 +138,14 @@ input[type="color"] {
 
 .cancel-edit-form:hover {
     background-color: #c82333; 
+}
+
+.delete-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }

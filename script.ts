@@ -38,7 +38,7 @@ class ScooterCard {
             <p> Status: ${this.scooterData.status} </p>
             <p> Battery: ${this.scooterData.batteryLevel}% </p>
             <p class="edit-delete-container"><button class="edit-button"> Edit </button>
-            <button class="cancel-edit-form"> Cancel </button></p>
+            <button class="delete-button"> Delete </button></p>
             `;
 
 //---------- EVENT LISTENERS FOR BUTTONS: ----------//
@@ -173,6 +173,8 @@ function populateEditForm(scooter: Scooter): void {
     editForm.querySelector('input[name="image-url"]')!.setAttribute('value', scooter.imageUrl);
     (editForm.querySelector('select[name="status"]') as HTMLSelectElement).value = scooter.status.toString();
     editForm.classList.add('unhidden');
+    const cardsContainer = document.getElementById('card-container');
+    cardsContainer?.classList.add('hidden');
 }
 
 //---------- DOM FUNCTIONS (EVENT LISTENERS): ----------//
@@ -189,6 +191,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     //----- EVENT LISTENERS: -----//
     unhideCreateButton.addEventListener("click", () => {
         createForm.classList.add('unhidden');
+        cardsContainer.classList.add('hidden');
     });
     // CREATE FORM LISTENER
     createForm.addEventListener("submit", async (event: Event) => {
@@ -197,7 +200,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         alert('Please enter valid details!');
         return; 
         } else {
-            cardsContainer.classList.add('hidden');
             const formData = new FormData(createForm);
             const newScooter: Scooter = {
                 model: formData.get('model') as string,
@@ -220,7 +222,6 @@ document.addEventListener("DOMContentLoaded", async () => {
             alert('Please enter valid details!');
             return; 
         } else {
-            cardsContainer.classList.add('hidden');
             const formData = new FormData(editForm);
             const edittedScooter: Scooter = {
                 serialNumber: formData.get('serial-number') as string,
@@ -246,12 +247,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     cancelCreateButton.addEventListener("click", () => {
         createForm.reset();
         createForm.classList.remove('unhidden');
+        cardsContainer.classList.remove('hidden');
         renderCards();
     });
+    // Close edit form:
     cancelEditButton.addEventListener("click", () => {
         editForm.reset();
         editForm.classList.remove('unhidden');
+        cardsContainer.classList.remove('hidden');
         renderCards();
+    });
+    // Cancel 
+    createForm.querySelector('input[type="reset"]')?.addEventListener("click", () => {
+        createForm.classList.remove('unhidden');
+        cardsContainer.classList.remove('hidden');
+    });
+    editForm.querySelector('input[type="reset"]')?.addEventListener("click", () => {
+        editForm.classList.remove('unhidden');
+        cardsContainer.classList.remove('hidden');
     });
 });
 
