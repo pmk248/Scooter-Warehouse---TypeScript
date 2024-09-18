@@ -13,8 +13,8 @@ nav {
 }
 
 nav button {
-    padding: 15px 25px; /* Increased padding */
-    font-size: 18px; /* Increased font size */
+    padding: 15px 25px; 
+    font-size: 18px; 
     font-weight: bold;
     color: #fff;
     border: none;
@@ -31,9 +31,9 @@ nav button:hover {
     background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    padding: 25px; /* Increased padding */
+    padding: 25px; 
     width: 100%;
-    max-width: 600px; /* Increased max-width */
+    max-width: 600px; 
     display: none;
     margin: 20px auto;
     flex-direction: column;
@@ -43,9 +43,9 @@ nav button:hover {
     background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    padding: 25px; /* Increased padding */
+    padding: 25px; 
     width: 100%;
-    max-width: 600px; /* Increased max-width */
+    max-width: 600px; 
     display: none;
     margin: 20px auto;
     flex-direction: column;
@@ -57,16 +57,16 @@ nav button:hover {
 
 form input, form select {
     width: 100%;
-    padding: 12px; /* Increased padding */
-    margin: 12px 0; /* Increased margin */
+    padding: 12px; 
+    margin: 12px 0; 
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 18px; /* Increased font size */
+    font-size: 18px; 
 }
 
 form input[type="submit"], form input[type="button"] {
-    padding: 12px 20px; /* Increased padding */
-    font-size: 18px; /* Increased font size */
+    padding: 12px 20px; 
+    font-size: 18px; 
     background-color: #007bff;
     color: white;
     cursor: pointer;
@@ -93,15 +93,15 @@ input[type="color"] {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 25px; /* Increased padding */
+    padding: 25px; 
     margin: 10px;
-    width: 300px; /* Increased card width */
+    width: 300px; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: none;
 }
 
 .card h2 {
-    font-size: 20px; /* Increased font size */
+    font-size: 20px; 
     background-color: #0056b3;
     color: #fff;
     padding: 10px;
@@ -109,7 +109,7 @@ input[type="color"] {
 }
 
 .edit-button {
-    background-color: #28a745; /* Green color */
+    background-color: #28a745; 
     color: white;
     border: none;
     padding: 10px;
@@ -119,11 +119,11 @@ input[type="color"] {
 }
 
 .edit-button:hover {
-    background-color: #218838; /* Darker green */
+    background-color: #218838; 
 }
 
 .delete-button {
-    background-color: #dc3545; /* Red color */
+    background-color: #dc3545;
     color: white;
     border: none;
     padding: 10px;
@@ -133,5 +133,5 @@ input[type="color"] {
 }
 
 .delete-button:hover {
-    background-color: #c82333; /* Darker red */
+    background-color: #c82333; 
 }
