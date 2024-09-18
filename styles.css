@@ -7,16 +7,16 @@ body {
 
 nav {
     display: flex;
-    justify-content: flex-start; /* Align items to the left (you can change to space-between if needed) */
-    align-items: center; /* Center items vertically */
+    justify-content: flex-start; 
+    align-items: center; 
     padding: 10px 30px;
     background-color: #007bff;
 }
 
 nav .nav-items {
     display: flex;
-    gap: 20px; /* Space between the logo and buttons */
-    align-items: center; /* Make sure items are centered vertically within nav-items */
+    gap: 20px; 
+    align-items: center; 
 }
 
 nav .logo {
