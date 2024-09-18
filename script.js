@@ -37,7 +37,7 @@ class ScooterCard {
             <p> Status: ${this.scooterData.status} </p>
             <p> Battery: ${this.scooterData.batteryLevel}% </p>
             <p class="edit-delete-container"><button class="edit-button"> Edit </button>
-            <button class="delete-button"> Delete </button></p>
+            <button class="cancel-edit-form"> Cancel </button></p>
             `;
         //---------- EVENT LISTENERS FOR BUTTONS: ----------//
         this.addEventListeners();
@@ -157,13 +157,6 @@ function renderCards() {
         const cardContainer = document.getElementById('card-container');
         const createForm = document.getElementById('create-form');
         const editForm = document.getElementById('edit-form');
-        // Hide if forms are up:
-        if (createForm.classList.contains('unhidden') || editForm.classList.contains('unhidden')) {
-            cardContainer.style.display = 'none';
-        }
-        else {
-            cardContainer.style.display = 'flex';
-        }
         cardContainer.innerHTML = '';
         try {
             const scooters = yield getAllScooters();
@@ -196,6 +189,8 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
     const editForm = document.getElementById('edit-form');
     const unhideCreateButton = document.getElementById('add-scooters-button');
     const cancelCreateButton = document.getElementById('cancel-create-form');
+    const cancelEditButton = document.getElementById('cancel-edit-form');
+    const cardsContainer = document.getElementById('card-container');
     //----- EVENT LISTENERS: -----//
     unhideCreateButton.addEventListener("click", () => {
         createForm.classList.add('unhidden');
@@ -208,6 +203,7 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
             return;
         }
         else {
+            cardsContainer.classList.add('hidden');
             const formData = new FormData(createForm);
             const newScooter = {
                 model: formData.get('model'),
@@ -219,6 +215,7 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
             createForm.reset();
             yield addScooter(newScooter);
             createForm.classList.remove('unhidden');
+            cardsContainer.classList.remove('hidden');
             yield renderCards();
         }
     }));
@@ -230,6 +227,7 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
             return;
         }
         else {
+            cardsContainer.classList.add('hidden');
             const formData = new FormData(editForm);
             const edittedScooter = {
                 serialNumber: formData.get('serial-number'),
@@ -247,13 +245,19 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
             }
             editForm.reset();
             editForm.classList.remove('unhidden');
+            cardsContainer.classList.remove('hidden');
             yield renderCards();
         }
     }));
-    // Close form:
+    // Close create form:
     cancelCreateButton.addEventListener("click", () => {
         createForm.reset();
         createForm.classList.remove('unhidden');
+        renderCards();
+    });
+    cancelEditButton.addEventListener("click", () => {
+        editForm.reset();
+        editForm.classList.remove('unhidden');
         renderCards();
     });
 }));
