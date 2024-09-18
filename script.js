@@ -34,7 +34,7 @@ class ScooterCard {
             <h2>${this.scooterData.model} </h2>
             <img src="${this.scooterData.imageUrl}" alt="${this.scooterData.model}">
             <p> Color: ${fullSquare(this.scooterData.color)}</p>
-            <p> Status: ${this.scooterData.status} </p>
+            <p> Status: ${Status[this.scooterData.status]} </p>
             <p> Battery: ${this.scooterData.batteryLevel}% </p>
             <p class="edit-delete-container"><button class="edit-button"> Edit </button>
             <button class="delete-button"> Delete </button></p>
@@ -155,11 +155,19 @@ function editScooter(id, edittedScooter) {
 function renderCards() {
     return __awaiter(this, void 0, void 0, function* () {
         const cardContainer = document.getElementById('card-container');
-        const createForm = document.getElementById('create-form');
-        const editForm = document.getElementById('edit-form');
         cardContainer.innerHTML = '';
+        const availabilityFilter = document.getElementById('availability-filter').value;
+        const batteryFilter = Number(document.getElementById('battery-filter').value);
         try {
-            const scooters = yield getAllScooters();
+            let scooters = yield getAllScooters();
+            // Filter out unavailable scooters
+            if (availabilityFilter === 'available') {
+                scooters = scooters.filter(scooter => scooter.status === Status.Available);
+            }
+            // Filter out below X% battery
+            if (batteryFilter > 0) {
+                scooters = scooters.filter(scooter => scooter.batteryLevel >= batteryFilter);
+            }
             scooters.forEach(scooter => {
                 const cardElement = document.createElement('div');
                 new ScooterCard(cardElement, scooter);
@@ -185,7 +193,7 @@ function populateEditForm(scooter) {
 }
 //---------- DOM FUNCTIONS (EVENT LISTENERS): ----------//
 document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+    var _a, _b, _c;
     renderCards();
     //----- ELEMENTS: -----//
     const createForm = document.getElementById('create-form');
@@ -273,6 +281,9 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
     (_b = editForm.querySelector('input[type="reset"]')) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
         editForm.classList.remove('unhidden');
         cardsContainer.classList.remove('hidden');
+    });
+    (_c = document.getElementById('apply-filters-button')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
+        renderCards();
     });
 }));
 //---------- TESTING AREA: ----------//

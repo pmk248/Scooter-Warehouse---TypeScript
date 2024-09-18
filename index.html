@@ -9,9 +9,28 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 </head>
 <body>
+    
     <nav>
-        <button type="button" class="btn btn-primary" id="add-scooters-button"> Add Scooter</button>
+        <div class="nav-items"></div>
+            <div class="logo">Scooter App</div> 
+            <form id="filter-form">
+                <div class="filter-group">
+                    <label for="availability-filter">Availability:</label>
+                    <select id="availability-filter">
+                        <option value="all">No Filter</option>
+                        <option value="available">Available</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="battery-filter">Battery Above:</label>
+                    <input type="number" id="battery-filter" min="0" max="100" placeholder="Battery %" value="0">
+                </div>
+                <button type="button" id="apply-filters-button" class="btn btn-success">Apply Filters</button>
+                <button type="button" class="btn btn-primary" id="add-scooters-button">Add Scooter</button>
+            </form>
+        </div>
     </nav>
+    
     <form class="create-form" id="create-form">
         <input type="text" name="model" placeholder="Model Name">
         <input type="number" name="battery-level" placeholder="Battery Level">

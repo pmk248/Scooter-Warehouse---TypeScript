@@ -35,7 +35,7 @@ class ScooterCard {
             <h2>${this.scooterData.model} </h2>
             <img src="${this.scooterData.imageUrl}" alt="${this.scooterData.model}">
             <p> Color: ${fullSquare(this.scooterData.color)}</p>
-            <p> Status: ${this.scooterData.status} </p>
+            <p> Status: ${Status[this.scooterData.status]} </p>
             <p> Battery: ${this.scooterData.batteryLevel}% </p>
             <p class="edit-delete-container"><button class="edit-button"> Edit </button>
             <button class="delete-button"> Delete </button></p>
@@ -146,13 +146,24 @@ async function editScooter(id: string, edittedScooter: Scooter): Promise<void> {
 //---------- DOM FUNCTIONS (STATIC FUNCTIONS): ----------//
 async function renderCards(): Promise<void> {
     const cardContainer = document.getElementById('card-container') as HTMLElement;
-    const createForm = document.getElementById('create-form') as HTMLFormElement;
-    const editForm = document.getElementById('edit-form') as HTMLFormElement;
-
     cardContainer.innerHTML = '';
 
+    const availabilityFilter = (document.getElementById('availability-filter') as HTMLSelectElement).value;
+    const batteryFilter = Number((document.getElementById('battery-filter') as HTMLInputElement).value);
+
     try {
-        const scooters = await getAllScooters();
+        let scooters = await getAllScooters();
+
+        // Filter out unavailable scooters
+        if (availabilityFilter === 'available') {
+            scooters = scooters.filter(scooter => scooter.status === Status.Available);
+        }
+
+        // Filter out below X% battery
+        if (batteryFilter > 0) {
+            scooters = scooters.filter(scooter => scooter.batteryLevel >= batteryFilter);
+        }
+
         scooters.forEach(scooter => {
             const cardElement = document.createElement('div');
             new ScooterCard(cardElement, scooter);
@@ -162,6 +173,7 @@ async function renderCards(): Promise<void> {
         console.error('Error fetching and rendering scooters:', error);
     }
 }
+
 
 
 function populateEditForm(scooter: Scooter): void {
@@ -266,6 +278,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         editForm.classList.remove('unhidden');
         cardsContainer.classList.remove('hidden');
     });
+    document.getElementById('apply-filters-button')?.addEventListener('click', () => {
+        renderCards();
+    });
+    
 });
 
 
