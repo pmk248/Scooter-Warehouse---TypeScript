@@ -1,11 +1,13 @@
 //---------- BOOTSTRAP SVGs: ----------//
-let fullSquare: string = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-square-fill" viewBox="0 0 16 16">
-  <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/>
-</svg>`
+let fullSquare = (color: string): string => `
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="${color}" class="bi bi-square-fill" viewBox="0 0 16 16">
+    <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/>
+</svg>`;
+
 
 //---------- DATA STRUCTURES: ----------//
 interface Scooter {
-    serialNumber: string;
+    serialNumber?: string;
     model: string;
     batteryLevel: number;
     imageUrl: string; 
@@ -29,25 +31,37 @@ class ScooterCard {
     renderCards(): void {
         this.element.classList.add('card');
         this.element.innerHTML = `
+            <input type="hidden" name="serialNumber" value="${this.scooterData.serialNumber}">
             <h2>${this.scooterData.model} </h2>
-            <image href="${this.scooterData.imageUrl}">
-            <p> Color: <span color="${this.scooterData.color}">${fullSquare}</span></p>
+            <img src="${this.scooterData.imageUrl}" alt="${this.scooterData.model}">
+            <p> Color: ${fullSquare(this.scooterData.color)}</p>
             <p> Status: ${this.scooterData.status} </p>
             <p> Battery: ${this.scooterData.batteryLevel}% </p>
-            <p class="edit-delete-container"><button class="edit-button"> Edit <button>
+            <p class="edit-delete-container"><button class="edit-button"> Edit </button>
             <button class="delete-button"> Delete </button></p>
             `;
+
+//---------- EVENT LISTENERS FOR BUTTONS: ----------//
         this.addEventListeners();
-    };
+    }
+
     addEventListeners(): void {
-        this.element.querySelector('.delete-button')?.addEventListener("click", () => {
-            removeScooter(this.scooterData.id);
+        const deleteButton = this.element.querySelector('.delete-button');
+        const editButton = this.element.querySelector('.edit-button');
+
+        deleteButton?.addEventListener('click', () => {
+            if (this.scooterData.serialNumber) {
+                removeScooter(this.scooterData.serialNumber);
+            }
         });
-        this.element.querySelector('.edit-button')?.addEventListener("click", () => {
-            //openEditForm(this.scooterData.id);
+
+        editButton?.addEventListener('click', () => {
+            if (this.scooterData.serialNumber) {
+                populateEditForm(this.scooterData);
+            }
         });
-    };
-};
+    }
+}
 
 //---------- API FUNCTIONS: ----------//
 const BASE_URL = "https://66eabf1755ad32cda47a3afc.mockapi.io/api/storage/scooters";
@@ -95,7 +109,6 @@ async function addScooter(newScooter: Scooter): Promise<void> {
     }
 };
 
-
 async function removeScooter(id: string): Promise<void> {
     try {
         const response = await fetch(`${BASE_URL}/${id}`, {
@@ -110,6 +123,7 @@ async function removeScooter(id: string): Promise<void> {
     } catch (error) {
         throw error;
     } 
+    renderCards();
 };
 
 async function editScooter(id: string, edittedScooter: Scooter): Promise<void> {
@@ -129,31 +143,114 @@ async function editScooter(id: string, edittedScooter: Scooter): Promise<void> {
     } 
 };
 
-//---------- MAIN ELEMENTS: ----------//
-const CONTAINER = document.getElementById('card-container');
+//---------- DOM FUNCTIONS (STATIC FUNCTIONS): ----------//
+async function renderCards(): Promise<void> {
+    const cardContainer = document.getElementById('card-container') as HTMLElement;
+    const createForm = document.getElementById('create-form') as HTMLFormElement;
+    const editForm = document.getElementById('edit-form') as HTMLFormElement;
 
-//---------- DOM FUNCTIONS: ----------//
-document.addEventListener("DOMContentLoaded", () => {
+    // Hide if forms are up:
+    if (createForm.classList.contains('unhidden') || editForm.classList.contains('unhidden')) {
+        cardContainer.style.display = 'none'; 
+    } else {
+        cardContainer.style.display = 'flex'; 
+    }
+
+    cardContainer.innerHTML = '';
+
+    try {
+        const scooters = await getAllScooters();
+        scooters.forEach(scooter => {
+            const cardElement = document.createElement('div');
+            new ScooterCard(cardElement, scooter);
+            cardContainer.appendChild(cardElement);
+        });
+    } catch (error) {
+        console.error('Error fetching and rendering scooters:', error);
+    }
+}
+
+
+function populateEditForm(scooter: Scooter): void {
+    const editForm = document.getElementById('edit-form') as HTMLFormElement;
+    editForm.querySelector('input[name="serial-number"]')!.setAttribute('value', scooter.serialNumber as string | "");
+    editForm.querySelector('input[name="model"]')!.setAttribute('value', scooter.model);
+    editForm.querySelector('input[name="battery-level"]')!.setAttribute('value', scooter.batteryLevel.toString());
+    editForm.querySelector('input[name="color"]')!.setAttribute('value', scooter.color);
+    editForm.querySelector('input[name="image-url"]')!.setAttribute('value', scooter.imageUrl);
+    (editForm.querySelector('select[name="status"]') as HTMLSelectElement).value = scooter.status.toString();
+    editForm.classList.add('unhidden');
+}
+
+//---------- DOM FUNCTIONS (EVENT LISTENERS): ----------//
+document.addEventListener("DOMContentLoaded", async () => {
     renderCards();
-});
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById('add-scooters-button')?.addEventListener("click", () => {
-        const createForm = document.getElementById('create-form');
-        if (createForm) {
-            createForm.classList.add('unhidden');
+    //----- ELEMENTS: -----//
+    const createForm = document.getElementById('create-form') as HTMLFormElement;
+    const editForm = document.getElementById('edit-form') as HTMLFormElement;
+    const unhideCreateButton = document.getElementById('add-scooters-button') as HTMLElement;
+    const cancelCreateButton = document.getElementById('cancel-create-form') as HTMLElement;
+
+    //----- EVENT LISTENERS: -----//
+    unhideCreateButton.addEventListener("click", () => {
+        createForm.classList.add('unhidden');
+    });
+    // CREATE FORM LISTENER
+    createForm.addEventListener("submit", async (event: Event) => {
+        event.preventDefault();
+    if (!createForm.checkValidity()) {
+        alert('Please enter valid details!');
+        return; 
+        } else {
+            const formData = new FormData(createForm);
+            const newScooter: Scooter = {
+                model: formData.get('model') as string,
+                batteryLevel: Number(formData.get('battery-level')),
+                color: formData.get('color') as string,
+                imageUrl: formData.get('image-url') as string,
+                status: Number(formData.get('status')),
+            };
+            createForm.reset();
+            await addScooter(newScooter);
+            createForm.classList.remove('unhidden');
+            await renderCards();
         }
     });
-
-    document.getElementById('create-form')?.addEventListener("submit", async (event) => {
+    // EDIT FORM LISTENER:
+    editForm.addEventListener("submit", async (event: Event) => {
         event.preventDefault();
-        // Will add form data collection logic here
+        if (!editForm.checkValidity()) {
+            alert('Please enter valid details!');
+            return; 
+        } else {
+            const formData = new FormData(editForm);
+            const edittedScooter: Scooter = {
+                serialNumber: formData.get('serial-number') as string,
+                model: formData.get('model') as string,
+                batteryLevel: Number(formData.get('battery-level')),
+                color: formData.get('color') as string,
+                imageUrl: formData.get('image-url') as string,
+                status: Number(formData.get('status')),
+            };
+            if (edittedScooter.serialNumber) {
+                await editScooter(edittedScooter.serialNumber , edittedScooter);
+            }
+            else {
+                console.error("Serial Number is not defined!");
+            }
+            editForm.reset();
+            editForm.classList.remove('unhidden');
+            await renderCards();
+        }
+    });
+    // Close form:
+    cancelCreateButton.addEventListener("click", () => {
+        createForm.reset();
+        createForm.classList.remove('unhidden');
+        renderCards();
     });
 });
 
-
-function renderCards(): void {
-    const allScooters = getAllScooters();
-}
 
 
 

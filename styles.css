@@ -13,8 +13,8 @@ nav {
 }
 
 nav button {
-    padding: 10px 20px;
-    font-size: 16px;
+    padding: 15px 25px; /* Increased padding */
+    font-size: 18px; /* Increased font size */
     font-weight: bold;
     color: #fff;
     border: none;
@@ -31,11 +31,11 @@ nav button:hover {
     background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    padding: 20px;
+    padding: 25px; /* Increased padding */
     width: 100%;
-    max-width: 500px;
-    display: none; 
-    margin: 20px auto; 
+    max-width: 600px; /* Increased max-width */
+    display: none;
+    margin: 20px auto;
     flex-direction: column;
 }
 
@@ -43,35 +43,37 @@ nav button:hover {
     background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
-    padding: 20px;
+    padding: 25px; /* Increased padding */
     width: 100%;
-    max-width: 500px;
-    display: none; 
-    margin: 20px auto; 
+    max-width: 600px; /* Increased max-width */
+    display: none;
+    margin: 20px auto;
     flex-direction: column;
 }
 
 .unhidden {
-    display: block !important; 
+    display: block !important;
 }
 
 form input, form select {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 12px; /* Increased padding */
+    margin: 12px 0; /* Increased margin */
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 18px; /* Increased font size */
 }
 
-form input[type="submit"], form input[type="reset"] {
+form input[type="submit"], form input[type="button"] {
+    padding: 12px 20px; /* Increased padding */
+    font-size: 18px; /* Increased font size */
     background-color: #007bff;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
-form input[type="submit"]:hover, form input[type="reset"]:hover {
+form input[type="submit"]:hover, form input[type="button"]:hover {
     background-color: #0056b3;
 }
 
@@ -91,9 +93,45 @@ input[type="color"] {
     background-color: #f9f9f9;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 20px;
+    padding: 25px; /* Increased padding */
     margin: 10px;
-    width: 250px;
+    width: 300px; /* Increased card width */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: none;
+}
+
+.card h2 {
+    font-size: 20px; /* Increased font size */
+    background-color: #0056b3;
+    color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.edit-button {
+    background-color: #28a745; /* Green color */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.edit-button:hover {
+    background-color: #218838; /* Darker green */
+}
+
+.delete-button {
+    background-color: #dc3545; /* Red color */
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.delete-button:hover {
+    background-color: #c82333; /* Darker red */
 }

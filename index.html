@@ -23,9 +23,10 @@
             <option name="unavailable" value="2"> Unavailable </option>
         </select>
         <input type="submit" value="Create">
-        <input type="reset" value="Reset Form">
+        <input type="button" value="Cancel" id="cancel-create-form">
     </form>
     <form class="edit-form" id="edit-form">
+        <input type="hidden" name="serial-number">
         <input type="text" name="model">
         <input type="number" name="battery-level">
         <input type="color" name="color">
