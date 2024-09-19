@@ -260,22 +260,3 @@ document.addEventListener("DOMContentLoaded", async () => {
         renderCards();
     });
 });
-
-
-
-
-
-
-
-//---------- TESTING AREA: ----------//
-
-// let xiaomi: Scooter = {model: "xiaomi 340x", batteryLevel: 80, imageUrl: "https://placeholder/example324.jpeg", color: "#000000", status: 0};
-// let ninebot: Scooter = {model: "ninebot 4", batteryLevel: 70, imageUrl: "https://placeholder/example333.jpeg", color: "#101010", status: 1};
-//addScooter(xiaomi).then(() => console.log("Scooter added successfully")).catch(error => console.error(error));
-//addScooter(ninebot).then(() => console.log("Scooter added successfully")).catch(error => console.error(error));
-//getScooter("4").then(result => console.log(result)).catch(error => console.error(error));
-//getAllScooters().then(result => console.log(result)).catch(error => console.error(error));
-//editScooter("3", {model: "NOT xiaomi 340x", batteryLevel: 80, imageUrl: "https://placeholder/example324.jpeg", color: "#000000", status: 0}).then(() => console.log("Scooter edited successfully")).catch(error => console.error(error));
-//getAllScooters().then(result => console.log(result)).catch(error => console.error(error));
-//removeScooter("4").then(() => console.log("Scooter removed successfully")).catch(error => console.error(error));
-//getAllScooters().then(result => console.log("all scooters:\n", result)).catch(error => console.error(error));
