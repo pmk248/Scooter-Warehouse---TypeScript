@@ -45,11 +45,13 @@ class ScooterCard {
     addEventListeners() {
         const deleteButton = this.element.querySelector('.delete-button');
         const editButton = this.element.querySelector('.edit-button');
+        // DELETE CARD EVENT LISTENER:
         deleteButton === null || deleteButton === void 0 ? void 0 : deleteButton.addEventListener('click', () => {
             if (this.scooterData.serialNumber) {
                 removeScooter(this.scooterData.serialNumber);
             }
         });
+        // EDIT CARD EVENT LISTENER:
         editButton === null || editButton === void 0 ? void 0 : editButton.addEventListener('click', () => {
             if (this.scooterData.serialNumber) {
                 populateEditForm(this.scooterData);
@@ -164,6 +166,7 @@ function renderCards() {
         cardsContainer.innerHTML = '';
         const availabilityFilter = document.getElementById('availability-filter').value;
         const batteryFilter = Number(document.getElementById('battery-filter').value);
+        // Checks if filter options have been set:
         try {
             let scooters = yield getAllScooters();
             // Filter out unavailable scooters
@@ -210,7 +213,6 @@ function closePopup(popUp) {
 document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     renderCards();
-    //----- ELEMENTS: -----//
     //----- EVENT LISTENERS: -----//
     unhideCreateButton.addEventListener("click", () => {
         openPopup(createForm);
@@ -263,12 +265,11 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
             closePopup(editForm);
         }
     }));
-    // Close create form:
+    // CREATE/EDIT FORMS -> CANCEL LISTENERS:
     cancelCreateButton.addEventListener("click", () => {
         closePopup(createForm);
         renderCards();
     });
-    // Close edit form:
     cancelEditButton.addEventListener("click", () => {
         closePopup(editForm);
         renderCards();

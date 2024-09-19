@@ -4,7 +4,6 @@ let fullSquare = (color: string): string => `
     <path d="M0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2z"/>
 </svg>`;
 
-
 //---------- DATA STRUCTURES: ----------//
 interface Scooter {
     serialNumber?: string;
@@ -19,7 +18,6 @@ enum Status {
     "Undergoing Repair",
     "Unavailable"
 };
-
 class ScooterCard {
     element: HTMLElement;
     scooterData: any;
@@ -40,21 +38,19 @@ class ScooterCard {
             <p class="edit-delete-container"><button class="edit-button"> Edit </button>
             <button class="delete-button"> Delete </button></p>
             `;
-
         //EVENT LISTENERS FOR CARD BUTTONS:
         this.addEventListeners();
     }
-
     addEventListeners(): void {
         const deleteButton = this.element.querySelector('.delete-button');
         const editButton = this.element.querySelector('.edit-button');
-
+        // DELETE CARD EVENT LISTENER:
         deleteButton?.addEventListener('click', () => {
             if (this.scooterData.serialNumber) {
                 removeScooter(this.scooterData.serialNumber);
             }
         });
-
+        // EDIT CARD EVENT LISTENER:
         editButton?.addEventListener('click', () => {
             if (this.scooterData.serialNumber) {
                 populateEditForm(this.scooterData);
@@ -103,7 +99,6 @@ async function addScooter(newScooter: Scooter): Promise<void> {
         if (!response.ok) {
             throw new Error("Scooter uploading failed!");
         }
-
     } catch (error) {
         throw error;
     }
@@ -156,20 +151,17 @@ async function renderCards(): Promise<void> {
 
     const availabilityFilter = (document.getElementById('availability-filter') as HTMLSelectElement).value;
     const batteryFilter = Number((document.getElementById('battery-filter') as HTMLInputElement).value);
-
+    // Checks if filter options have been set:
     try {
         let scooters = await getAllScooters();
-
         // Filter out unavailable scooters
         if (availabilityFilter === 'available') {
             scooters = scooters.filter(scooter => scooter.status === Status.Available);
         }
-
         // Filter out below X% battery
         if (batteryFilter > 0) {
             scooters = scooters.filter(scooter => scooter.batteryLevel >= batteryFilter);
         }
-
         scooters.forEach(scooter => {
             const cardElement = document.createElement('div');
             new ScooterCard(cardElement, scooter);
@@ -179,8 +171,6 @@ async function renderCards(): Promise<void> {
         console.error('Error fetching and rendering scooters:', error);
     }
 }
-
-
 
 function populateEditForm(scooter: Scooter): void {
     const editForm = document.getElementById('edit-form') as HTMLFormElement;
@@ -207,8 +197,6 @@ function closePopup(popUp: HTMLFormElement): void {
 //---------- DOM FUNCTIONS (EVENT LISTENERS): ----------//
 document.addEventListener("DOMContentLoaded", async () => {
     renderCards();
-    //----- ELEMENTS: -----//
-
     //----- EVENT LISTENERS: -----//
     unhideCreateButton.addEventListener("click", () => {
         openPopup(createForm);
@@ -259,21 +247,18 @@ document.addEventListener("DOMContentLoaded", async () => {
             closePopup(editForm);
         }
     });
-    // Close create form:
+    // CREATE/EDIT FORMS -> CANCEL LISTENERS:
     cancelCreateButton.addEventListener("click", () => {
         closePopup(createForm);
         renderCards();
     });
-    // Close edit form:
     cancelEditButton.addEventListener("click", () => {
         closePopup(editForm);
         renderCards();
     });
-
     document.getElementById('apply-filters-button')?.addEventListener('click', () => {
         renderCards();
     });
-    
 });
 
 
