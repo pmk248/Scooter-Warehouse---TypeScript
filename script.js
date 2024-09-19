@@ -39,7 +39,7 @@ class ScooterCard {
             <p class="edit-delete-container"><button class="edit-button"> Edit </button>
             <button class="delete-button"> Delete </button></p>
             `;
-        //---------- EVENT LISTENERS FOR BUTTONS: ----------//
+        //EVENT LISTENERS FOR CARD BUTTONS:
         this.addEventListeners();
     }
     addEventListeners() {
@@ -151,11 +151,17 @@ function editScooter(id, edittedScooter) {
     });
 }
 ;
+//---------- ELEMENTS: ----------//
+const createForm = document.getElementById('create-form');
+const editForm = document.getElementById('edit-form');
+const unhideCreateButton = document.getElementById('add-scooters-button');
+const cancelCreateButton = document.getElementById('cancel-create-form');
+const cancelEditButton = document.getElementById('cancel-edit-form');
+const cardsContainer = document.getElementById('card-container');
 //---------- DOM FUNCTIONS (STATIC FUNCTIONS): ----------//
 function renderCards() {
     return __awaiter(this, void 0, void 0, function* () {
-        const cardContainer = document.getElementById('card-container');
-        cardContainer.innerHTML = '';
+        cardsContainer.innerHTML = '';
         const availabilityFilter = document.getElementById('availability-filter').value;
         const batteryFilter = Number(document.getElementById('battery-filter').value);
         try {
@@ -171,7 +177,7 @@ function renderCards() {
             scooters.forEach(scooter => {
                 const cardElement = document.createElement('div');
                 new ScooterCard(cardElement, scooter);
-                cardContainer.appendChild(cardElement);
+                cardsContainer.appendChild(cardElement);
             });
         }
         catch (error) {
@@ -187,25 +193,27 @@ function populateEditForm(scooter) {
     editForm.querySelector('input[name="color"]').setAttribute('value', scooter.color);
     editForm.querySelector('input[name="image-url"]').setAttribute('value', scooter.imageUrl);
     editForm.querySelector('select[name="status"]').value = scooter.status.toString();
-    editForm.classList.add('unhidden');
-    const cardsContainer = document.getElementById('card-container');
-    cardsContainer === null || cardsContainer === void 0 ? void 0 : cardsContainer.classList.add('hidden');
+    openPopup(editForm);
 }
+function openPopup(popUp) {
+    popUp.classList.add('unhidden');
+    cardsContainer.classList.add('hidden');
+}
+;
+function closePopup(popUp) {
+    popUp.reset();
+    popUp.classList.remove('unhidden');
+    cardsContainer.classList.remove('hidden');
+}
+;
 //---------- DOM FUNCTIONS (EVENT LISTENERS): ----------//
 document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c;
+    var _a;
     renderCards();
     //----- ELEMENTS: -----//
-    const createForm = document.getElementById('create-form');
-    const editForm = document.getElementById('edit-form');
-    const unhideCreateButton = document.getElementById('add-scooters-button');
-    const cancelCreateButton = document.getElementById('cancel-create-form');
-    const cancelEditButton = document.getElementById('cancel-edit-form');
-    const cardsContainer = document.getElementById('card-container');
     //----- EVENT LISTENERS: -----//
     unhideCreateButton.addEventListener("click", () => {
-        createForm.classList.add('unhidden');
-        cardsContainer.classList.add('hidden');
+        openPopup(createForm);
     });
     // CREATE FORM LISTENER
     createForm.addEventListener("submit", (event) => __awaiter(void 0, void 0, void 0, function* () {
@@ -223,11 +231,9 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
                 imageUrl: formData.get('image-url'),
                 status: Number(formData.get('status')),
             };
-            createForm.reset();
             yield addScooter(newScooter);
-            createForm.classList.remove('unhidden');
-            cardsContainer.classList.remove('hidden');
             yield renderCards();
+            closePopup(createForm);
         }
     }));
     // EDIT FORM LISTENER:
@@ -253,36 +259,21 @@ document.addEventListener("DOMContentLoaded", () => __awaiter(void 0, void 0, vo
             else {
                 console.error("Serial Number is not defined!");
             }
-            editForm.reset();
-            editForm.classList.remove('unhidden');
-            cardsContainer.classList.remove('hidden');
             yield renderCards();
+            closePopup(editForm);
         }
     }));
     // Close create form:
     cancelCreateButton.addEventListener("click", () => {
-        createForm.reset();
-        createForm.classList.remove('unhidden');
-        cardsContainer.classList.remove('hidden');
+        closePopup(createForm);
         renderCards();
     });
     // Close edit form:
     cancelEditButton.addEventListener("click", () => {
-        editForm.reset();
-        editForm.classList.remove('unhidden');
-        cardsContainer.classList.remove('hidden');
+        closePopup(editForm);
         renderCards();
     });
-    // Cancel 
-    (_a = createForm.querySelector('input[type="reset"]')) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
-        createForm.classList.remove('unhidden');
-        cardsContainer.classList.remove('hidden');
-    });
-    (_b = editForm.querySelector('input[type="reset"]')) === null || _b === void 0 ? void 0 : _b.addEventListener("click", () => {
-        editForm.classList.remove('unhidden');
-        cardsContainer.classList.remove('hidden');
-    });
-    (_c = document.getElementById('apply-filters-button')) === null || _c === void 0 ? void 0 : _c.addEventListener('click', () => {
+    (_a = document.getElementById('apply-filters-button')) === null || _a === void 0 ? void 0 : _a.addEventListener('click', () => {
         renderCards();
     });
 }));

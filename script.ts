@@ -41,7 +41,7 @@ class ScooterCard {
             <button class="delete-button"> Delete </button></p>
             `;
 
-//---------- EVENT LISTENERS FOR BUTTONS: ----------//
+        //EVENT LISTENERS FOR CARD BUTTONS:
         this.addEventListeners();
     }
 
@@ -142,11 +142,17 @@ async function editScooter(id: string, edittedScooter: Scooter): Promise<void> {
         throw error;
     } 
 };
+//---------- ELEMENTS: ----------//
+const createForm = document.getElementById('create-form') as HTMLFormElement;
+const editForm = document.getElementById('edit-form') as HTMLFormElement;
+const unhideCreateButton = document.getElementById('add-scooters-button') as HTMLElement;
+const cancelCreateButton = document.getElementById('cancel-create-form') as HTMLElement;
+const cancelEditButton = document.getElementById('cancel-edit-form') as HTMLElement;
+const cardsContainer = document.getElementById('card-container') as HTMLElement;
 
 //---------- DOM FUNCTIONS (STATIC FUNCTIONS): ----------//
 async function renderCards(): Promise<void> {
-    const cardContainer = document.getElementById('card-container') as HTMLElement;
-    cardContainer.innerHTML = '';
+    cardsContainer.innerHTML = '';
 
     const availabilityFilter = (document.getElementById('availability-filter') as HTMLSelectElement).value;
     const batteryFilter = Number((document.getElementById('battery-filter') as HTMLInputElement).value);
@@ -167,7 +173,7 @@ async function renderCards(): Promise<void> {
         scooters.forEach(scooter => {
             const cardElement = document.createElement('div');
             new ScooterCard(cardElement, scooter);
-            cardContainer.appendChild(cardElement);
+            cardsContainer.appendChild(cardElement);
         });
     } catch (error) {
         console.error('Error fetching and rendering scooters:', error);
@@ -184,26 +190,28 @@ function populateEditForm(scooter: Scooter): void {
     editForm.querySelector('input[name="color"]')!.setAttribute('value', scooter.color);
     editForm.querySelector('input[name="image-url"]')!.setAttribute('value', scooter.imageUrl);
     (editForm.querySelector('select[name="status"]') as HTMLSelectElement).value = scooter.status.toString();
-    editForm.classList.add('unhidden');
-    const cardsContainer = document.getElementById('card-container');
-    cardsContainer?.classList.add('hidden');
+    openPopup(editForm);
 }
+
+function openPopup(popUp: HTMLFormElement): void {
+    popUp.classList.add('unhidden');
+    cardsContainer.classList.add('hidden');
+};
+
+function closePopup(popUp: HTMLFormElement): void {
+    popUp.reset();
+    popUp.classList.remove('unhidden');
+    cardsContainer.classList.remove('hidden');
+};
 
 //---------- DOM FUNCTIONS (EVENT LISTENERS): ----------//
 document.addEventListener("DOMContentLoaded", async () => {
     renderCards();
     //----- ELEMENTS: -----//
-    const createForm = document.getElementById('create-form') as HTMLFormElement;
-    const editForm = document.getElementById('edit-form') as HTMLFormElement;
-    const unhideCreateButton = document.getElementById('add-scooters-button') as HTMLElement;
-    const cancelCreateButton = document.getElementById('cancel-create-form') as HTMLElement;
-    const cancelEditButton = document.getElementById('cancel-edit-form') as HTMLElement;
-    const cardsContainer = document.getElementById('card-container') as HTMLElement;
 
     //----- EVENT LISTENERS: -----//
     unhideCreateButton.addEventListener("click", () => {
-        createForm.classList.add('unhidden');
-        cardsContainer.classList.add('hidden');
+        openPopup(createForm);
     });
     // CREATE FORM LISTENER
     createForm.addEventListener("submit", async (event: Event) => {
@@ -220,11 +228,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                 imageUrl: formData.get('image-url') as string,
                 status: Number(formData.get('status')),
             };
-            createForm.reset();
             await addScooter(newScooter);
-            createForm.classList.remove('unhidden');
-            cardsContainer.classList.remove('hidden');
             await renderCards();
+            closePopup(createForm);
         }
     });
     // EDIT FORM LISTENER:
@@ -249,42 +255,26 @@ document.addEventListener("DOMContentLoaded", async () => {
             else {
                 console.error("Serial Number is not defined!");
             }
-            editForm.reset();
-            editForm.classList.remove('unhidden');
-            cardsContainer.classList.remove('hidden');
             await renderCards();
+            closePopup(editForm);
         }
     });
     // Close create form:
     cancelCreateButton.addEventListener("click", () => {
-        createForm.reset();
-        createForm.classList.remove('unhidden');
-        cardsContainer.classList.remove('hidden');
+        closePopup(createForm);
         renderCards();
     });
     // Close edit form:
     cancelEditButton.addEventListener("click", () => {
-        editForm.reset();
-        editForm.classList.remove('unhidden');
-        cardsContainer.classList.remove('hidden');
+        closePopup(editForm);
         renderCards();
     });
-    // Cancel 
-    createForm.querySelector('input[type="reset"]')?.addEventListener("click", () => {
-        createForm.classList.remove('unhidden');
-        cardsContainer.classList.remove('hidden');
-    });
-    editForm.querySelector('input[type="reset"]')?.addEventListener("click", () => {
-        editForm.classList.remove('unhidden');
-        cardsContainer.classList.remove('hidden');
-    });
+
     document.getElementById('apply-filters-button')?.addEventListener('click', () => {
         renderCards();
     });
     
 });
-
-
 
 
 
